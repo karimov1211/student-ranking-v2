@@ -24,15 +24,11 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Glowing Orbs */
 .background-effects {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     z-index: -1;
-    overflow: hidden;
 }
 
 .glow-orb {
@@ -42,319 +38,133 @@ body {
     opacity: 0.5;
 }
 
-.orb-1 {
-    top: -10%;
-    left: -10%;
-    width: 50vw;
-    height: 50vw;
-    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-}
+.orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); }
+.orb-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, var(--secondary) 0%, transparent 70%); }
 
-.orb-2 {
-    bottom: -20%;
-    right: -10%;
-    width: 60vw;
-    height: 60vw;
-    background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
-}
-
-/* Container & Glassmorphism */
 .container {
-    max-width: 1100px;
+    max-width: 1300px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 3rem 2rem;
 }
 
 .glass-panel {
     background: var(--glass-bg);
     backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
     border-radius: 24px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Header */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 2.5rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.logo i {
-    font-size: 2rem;
-    color: var(--primary);
-}
-
-.logo h1 {
-    font-size: 1.8rem;
-    font-weight: 800;
-}
-
-.logo span {
-    color: var(--primary);
-}
+.logo { display: flex; align-items: center; gap: 1rem; }
+.logo i { font-size: 2.2rem; color: var(--primary); }
+.logo h1 { font-size: 2rem; font-weight: 800; }
+.logo span { color: var(--primary); }
 
 .badge {
     background: rgba(59, 130, 246, 0.1);
     color: #60a5fa;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     border-radius: 50px;
     font-weight: 600;
-    font-size: 0.9rem;
     border: 1px solid rgba(59, 130, 246, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    display: flex; align-items: center; gap: 0.6rem;
 }
 
-/* Table Section */
-.main-content {
-    padding: 2.5rem;
-}
-
-.table-header {
-    margin-bottom: 2rem;
-}
-
-.table-header h2 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-.table-header p {
-    color: var(--text-muted);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th {
-    text-align: left;
-    padding: 1rem 1.5rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    border-bottom: 2px solid var(--glass-border);
-}
-
-td {
-    padding: 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    vertical-align: middle;
-}
-
-.table-row {
-    transition: background-color 0.3s ease;
-}
-
-.table-row:hover {
-    background-color: rgba(255, 255, 255, 0.03);
-}
-
-/* Rank Badges */
-.rank-badge {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    font-weight: 800;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.rank-1 {
-    background: linear-gradient(135deg, #fbbf24, #d97706);
-    color: #fff;
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
-}
-
-.rank-2 {
-    background: linear-gradient(135deg, #94a3b8, #475569);
-    color: #fff;
-}
-
-.rank-3 {
-    background: linear-gradient(135deg, #b45309, #78350f);
-    color: #fff;
-}
-
-/* GPA Badge */
-.gpa-badge {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    padding: 0.5rem 1.2rem;
-    border-radius: 50px;
-    font-weight: 800;
-    color: white;
-    box-shadow: 0 0 20px var(--primary-glow);
-}
-
-/* Animations */
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.empty-state {
-    text-align: center;
-    padding: 4rem;
-    color: var(--text-muted);
-}
-
-.empty-state i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-}
-/* Tabs Navigation */
+/* Redesigned Premium Navigation */
 .tabs-nav {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding: 0.6rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .tab-btn {
-    padding: 0.8rem 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    padding: 1.2rem 3rem;
+    background: transparent;
+    border: none;
+    border-radius: 16px;
     color: var(--text-muted);
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 0.4s ease;
+    display: flex; align-items: center; gap: 0.8rem;
 }
 
-.tab-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
+.tab-btn:hover { color: white; background: rgba(255, 255, 255, 0.05); }
 
 .tab-btn.active {
-    background: var(--primary);
     color: white;
-    border-color: var(--primary);
-    box-shadow: 0 0 20px var(--primary-glow);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    box-shadow: 0 10px 30px var(--primary-glow);
+    transform: translateY(-2px);
 }
 
-.tab-content {
-    display: none;
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: slideUp 0.5s ease; }
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.tab-content.active {
-    display: block;
+/* Ranking Table */
+.main-content { padding: 3rem; }
+.table-header { margin-bottom: 2.5rem; }
+.table-header h2 { font-size: 2.2rem; margin-bottom: 0.6rem; }
+.table-header p { color: var(--text-muted); font-size: 1.1rem; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 1.2rem; color: var(--text-muted); border-bottom: 2px solid var(--glass-border); }
+td { padding: 1.8rem 1.2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+
+.rank-badge {
+    width: 45px; height: 45px;
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 14px; font-weight: 800; background: rgba(255, 255, 255, 0.1);
+}
+.rank-1 { background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff; box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
+.gpa-badge {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 800; color: white;
 }
 
-/* Exam Schedule Styles */
-.schedule-group {
-    margin-bottom: 2.5rem;
-}
-
+/* Exam Schedule */
+.schedule-group { margin-bottom: 3rem; }
 .date-header {
     background: var(--secondary);
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    color: white; padding: 0.6rem 2rem; border-radius: 10px;
+    font-weight: bold; display: inline-block; margin-bottom: 1.2rem;
 }
-
 .exam-card {
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 4px solid var(--primary);
-    padding: 1.5rem;
-    border-radius: 0 12px 12px 0;
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: transform 0.2s;
+    background: rgba(255, 255, 255, 0.03); border-left: 5px solid var(--primary);
+    padding: 2rem; border-radius: 0 16px 16px 0; margin-bottom: 1.2rem;
+    display: flex; justify-content: space-between; align-items: center;
 }
-
-.exam-card:hover {
-    transform: translateX(5px);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.exam-info h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.3rem;
-}
-
-.exam-meta {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    display: flex;
-    gap: 1.5rem;
-}
-
-.exam-time {
-    font-weight: 800;
-    color: var(--primary);
-    font-size: 1.1rem;
-}
+.exam-info h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+.exam-meta { color: var(--text-muted); display: flex; gap: 2rem; }
+.exam-time { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
 
 /* Finance Panel */
-.finance-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.finance-card {
-    padding: 1.5rem;
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
-}
-
-.finance-card h3 {
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--glass-border);
-    padding-bottom: 0.5rem;
-}
-
-.finance-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.8rem;
-    font-size: 0.9rem;
-}
-
-.finance-item .label { color: var(--text-muted); }
-.finance-item .value { font-weight: bold; }
-
-.status-badge {
-    padding: 0.3rem 0.8rem;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
+.finance-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+.finance-card { padding: 2rem; border: 1px solid var(--glass-border); border-radius: 20px; background: rgba(255, 255, 255, 0.02); }
+.finance-card h3 { font-size: 1.4rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.8rem; }
+.finance-item { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 1.1rem; }
+.status-badge { padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.9rem; font-weight: bold; }
 .status-grant { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
 .status-contract { background: rgba(249, 115, 22, 0.1); color: #fb923c; }
