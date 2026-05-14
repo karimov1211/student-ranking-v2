@@ -33,7 +33,7 @@ async def read_root(request: Request):
         students_data = db.get_students()
         
         if not grades_data:
-            return templates.TemplateResponse("index.html", {"request": request, "ranking": []})
+            return templates.TemplateResponse(request=request, name="index.html", context={"ranking": []})
 
         gpa_results = RatingCalculator.calculate_gpa(grades_data)
         students_df = pd.DataFrame(students_data)
@@ -42,7 +42,7 @@ async def read_root(request: Request):
         final_df = final_df.sort_values(by='gpa', ascending=False)
         
         ranking_data = final_df.to_dict(orient='records')
-        return templates.TemplateResponse("index.html", {"request": request, "ranking": ranking_data})
+        return templates.TemplateResponse(request=request, name="index.html", context={"ranking": ranking_data})
     except Exception as e:
         import traceback
         return {"error": str(e), "traceback": traceback.format_exc()}
