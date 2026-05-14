@@ -27,21 +27,25 @@ app.add_middleware(
 @app.get("/")
 async def read_root(request: Request):
     """Saytning asosiy UI qismini ochadi"""
-    db = DatabaseManager()
-    grades_data = db.get_all_grades()
-    students_data = db.get_students()
-    
-    if not grades_data:
-        return templates.TemplateResponse("index.html", {"request": request, "ranking": []})
+    try:
+        db = DatabaseManager()
+        grades_data = db.get_all_grades()
+        students_data = db.get_students()
+        
+        if not grades_data:
+            return templates.TemplateResponse("index.html", {"request": request, "ranking": []})
 
-    gpa_results = RatingCalculator.calculate_gpa(grades_data)
-    students_df = pd.DataFrame(students_data)
-    final_df = pd.merge(students_df, gpa_results, left_on='id', right_on='student_id', how='inner')
-    final_df['gpa'] = final_df['gpa'].round(2)
-    final_df = final_df.sort_values(by='gpa', ascending=False)
-    
-    ranking_data = final_df.to_dict(orient='records')
-    return templates.TemplateResponse("index.html", {"request": request, "ranking": ranking_data})
+        gpa_results = RatingCalculator.calculate_gpa(grades_data)
+        students_df = pd.DataFrame(students_data)
+        final_df = pd.merge(students_df, gpa_results, left_on='id', right_on='student_id', how='inner')
+        final_df['gpa'] = final_df['gpa'].round(2)
+        final_df = final_df.sort_values(by='gpa', ascending=False)
+        
+        ranking_data = final_df.to_dict(orient='records')
+        return templates.TemplateResponse("index.html", {"request": request, "ranking": ranking_data})
+    except Exception as e:
+        import traceback
+        return {"error": str(e), "traceback": traceback.format_exc()}
 
 @app.get("/api/ranking")
 async def get_ranking():
