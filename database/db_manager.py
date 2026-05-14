@@ -8,11 +8,11 @@ load_dotenv()
 class DatabaseManager:
     def __init__(self):
         self.conn_str = (
-            f"DRIVER={os.getenv('AZURE_SQL_DRIVER')};"
-            f"SERVER={os.getenv('AZURE_SQL_SERVER')};"
-            f"DATABASE={os.getenv('AZURE_SQL_DATABASE')};"
-            f"UID={os.getenv('AZURE_SQL_USERNAME')};"
-            f"PWD={os.getenv('AZURE_SQL_PASSWORD')}"
+            f"DRIVER={os.getenv('AZURE_SQL_DRIVER', '{ODBC Driver 18 for SQL Server}')};"
+            f"SERVER={os.getenv('AZURE_SQL_SERVER', 'library-server-karimov1211.database.windows.net')};"
+            f"DATABASE={os.getenv('AZURE_SQL_DATABASE', 'RankingDB_v2')};"
+            f"UID={os.getenv('AZURE_SQL_USERNAME', 'dbadmin')};"
+            f"PWD={os.getenv('AZURE_SQL_PASSWORD', 'AzurePassword123!')}"
         )
 
     def get_connection(self):
