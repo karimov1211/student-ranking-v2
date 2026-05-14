@@ -27,23 +27,38 @@ app.add_middleware(
 
 @app.get("/")
 async def read_root(request: Request):
-    """Saytning asosiy UI qismini ochadi"""
+    """Saytning barcha panellarini (Reyting, Imtihonlar, To'lovlar) ochadi"""
     try:
         db = DatabaseManager()
+        db.init_db() # Jadvallarni tekshirish
+        
+        # 1. Reyting ma'lumotlari
         grades_data = db.get_all_grades()
         students_data = db.get_students()
-        
-        if not grades_data:
-            return templates.TemplateResponse(request=request, name="index.html", context={"ranking": []})
+        ranking_data = []
+        if grades_data and students_data:
+            gpa_results = RatingCalculator.calculate_gpa(grades_data)
+            students_df = pd.DataFrame(students_data)
+            final_df = pd.merge(students_df, gpa_results, left_on='id', right_on='student_id', how='inner')
+            final_df['gpa'] = final_df['gpa'].round(2)
+            final_df = final_df.sort_values(by='gpa', ascending=False)
+            ranking_data = final_df.to_dict(orient='records')
 
-        gpa_results = RatingCalculator.calculate_gpa(grades_data)
-        students_df = pd.DataFrame(students_data)
-        final_df = pd.merge(students_df, gpa_results, left_on='id', right_on='student_id', how='inner')
-        final_df['gpa'] = final_df['gpa'].round(2)
-        final_df = final_df.sort_values(by='gpa', ascending=False)
+        # 2. Imtihonlar jadvali
+        exams_data = db.get_exams()
         
-        ranking_data = final_df.to_dict(orient='records')
-        return templates.TemplateResponse(request=request, name="index.html", context={"ranking": ranking_data})
+        # 3. Moliya (To'lovlar)
+        finances_data = db.get_finances()
+        
+        return templates.TemplateResponse(
+            request=request, 
+            name="index.html", 
+            context={
+                "ranking": ranking_data,
+                "exams": exams_data,
+                "finances": finances_data
+            }
+        )
     except Exception as e:
         import traceback
         return {"error": str(e), "traceback": traceback.format_exc()}

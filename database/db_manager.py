@@ -19,11 +19,11 @@ class DatabaseManager:
         return pyodbc.connect(self.conn_str)
 
     def init_db(self):
-        """Ma'lumotlar bazasida kerakli jadvallarni yaratish"""
+        """Ma'lumotlar bazasida barcha kerakli jadvallarni yaratish"""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
-            # Talabalar jadvali
+            # 1. Talabalar
             cursor.execute("""
                 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Students')
                 CREATE TABLE Students (
@@ -33,7 +33,7 @@ class DatabaseManager:
                 )
             """)
             
-            # Fanlar jadvali
+            # 2. Fanlar
             cursor.execute("""
                 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Courses')
                 CREATE TABLE Courses (
@@ -43,7 +43,7 @@ class DatabaseManager:
                 )
             """)
             
-            # Baholar jadvali
+            # 3. Baholar
             cursor.execute("""
                 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Grades')
                 CREATE TABLE Grades (
@@ -53,9 +53,74 @@ class DatabaseManager:
                     Grade FLOAT NOT NULL
                 )
             """)
+
+            # 4. Imtihonlar jadvali
+            cursor.execute("""
+                IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Exams')
+                CREATE TABLE Exams (
+                    ID INT PRIMARY KEY IDENTITY(1,1),
+                    ExamType NVARCHAR(50),
+                    CourseName NVARCHAR(100),
+                    ExamDate DATE,
+                    ExamTime NVARCHAR(10),
+                    Teacher NVARCHAR(100),
+                    Room NVARCHAR(50)
+                )
+            """)
+            
+            # 5. Talabalar moliyasi
+            cursor.execute("""
+                IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Finances')
+                CREATE TABLE Finances (
+                    ID INT PRIMARY KEY IDENTITY(1,1),
+                    StudentID INT FOREIGN KEY REFERENCES Students(ID),
+                    FundingType NVARCHAR(20),
+                    TotalAmount FLOAT DEFAULT 0,
+                    PaidAmount FLOAT DEFAULT 0
+                )
+            """)
             
             conn.commit()
-            print("Jadvallar muvaffaqiyatli yaratildi yoki allaqachon mavjud.")
+            print("Jadvallar muvaffaqiyatli yaratildi.")
+
+    def get_exams(self):
+        """Imtihonlar jadvalini olish"""
+        query = "SELECT ExamType, CourseName, ExamDate, ExamTime, Teacher, Room FROM Exams ORDER BY ExamDate"
+        exams = []
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query)
+            for row in cursor.fetchall():
+                exams.append({
+                    'type': row.ExamType,
+                    'course': row.CourseName,
+                    'date': str(row.ExamDate),
+                    'time': row.ExamTime,
+                    'teacher': row.Teacher,
+                    'room': row.Room
+                })
+        return exams
+
+    def get_finances(self):
+        """Talabalar to'lov ma'lumotlarini olish"""
+        query = """
+            SELECT s.FullName, f.FundingType, f.TotalAmount, f.PaidAmount 
+            FROM Finances f
+            JOIN Students s ON f.StudentID = s.ID
+        """
+        finances = []
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query)
+            for row in cursor.fetchall():
+                finances.append({
+                    'full_name': row.FullName,
+                    'type': row.FundingType,
+                    'total': row.TotalAmount,
+                    'paid': row.PaidAmount,
+                    'debt': row.TotalAmount - row.PaidAmount
+                })
+        return finances
 
     def get_all_grades(self):
         """Baholarni o'qish (Pandas algoritmi uchun).

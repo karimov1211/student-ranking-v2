@@ -17,23 +17,36 @@
     <div class="container">
         <header class="glass-panel header">
             <div class="logo">
-                <i class="fas fa-chart-line"></i>
+                <i class="fas fa-graduation-cap"></i>
                 <h1>Ranking<span>System</span> V2</h1>
             </div>
             <div class="header-info" style="display: flex; gap: 1rem; align-items: center;">
                 <span class="badge"><i class="fas fa-database"></i> Azure SQL Ulandi</span>
-                <button onclick="document.getElementById('addModal').style.display='flex'" style="padding: 0.6rem 1.2rem; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: transform 0.2s;">
+                <button onclick="document.getElementById('addModal').style.display='flex'" style="padding: 0.6rem 1.2rem; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
                     <i class="fas fa-plus"></i> Yangi Talaba
                 </button>
             </div>
         </header>
 
-        <main class="glass-panel main-content">
+        <!-- Navigatsiya Tablari -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="openTab(event, 'ranking-tab')">
+                <i class="fas fa-trophy"></i> Reyting
+            </button>
+            <button class="tab-btn" onclick="openTab(event, 'exams-tab')">
+                <i class="fas fa-calendar-alt"></i> Imtihonlar
+            </button>
+            <button class="tab-btn" onclick="openTab(event, 'finance-tab')">
+                <i class="fas fa-wallet"></i> To'lovlar
+            </button>
+        </div>
+
+        <!-- 🏆 REYTING PANELI -->
+        <main id="ranking-tab" class="glass-panel main-content tab-content active">
             <div class="table-header">
                 <h2>Top Talabalar Reytingi</h2>
-                <p>Pandas yordamida vaznli GPA hisoblangan</p>
+                <p>Pandas orqali vaznli GPA hisoblangan</p>
             </div>
-
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -41,35 +54,92 @@
                             <th>O'rin</th>
                             <th>F.I.SH</th>
                             <th>Yo'nalish</th>
-                            <th>Weighted GPA</th>
+                            <th>GPA</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% if ranking %}
                             {% for student in ranking %}
                             <tr class="table-row fade-in" style="animation-delay: {{ loop.index0 * 0.1 }}s">
-                                <td>
-                                    <div class="rank-badge rank-{{ loop.index }}">
-                                        #{{ loop.index }}
-                                    </div>
-                                </td>
+                                <td><div class="rank-badge rank-{{ loop.index }}">#{{ loop.index }}</div></td>
                                 <td><strong>{{ student.full_name }}</strong></td>
                                 <td>{{ student.major }}</td>
-                                <td>
-                                    <span class="gpa-badge">{{ student.gpa }}</span>
-                                </td>
+                                <td><span class="gpa-badge">{{ student.gpa }}</span></td>
                             </tr>
                             {% endfor %}
                         {% else %}
-                            <tr>
-                                <td colspan="4" class="empty-state">
-                                    <i class="fas fa-folder-open"></i>
-                                    <p>Hozircha ma'lumotlar yo'q</p>
-                                </td>
-                            </tr>
+                            <tr><td colspan="4" class="empty-state"><i class="fas fa-folder-open"></i><p>Ma'lumotlar yo'q</p></td></tr>
                         {% endif %}
                     </tbody>
                 </table>
+            </div>
+        </main>
+
+        <!-- 📅 IMTIHONLAR PANELI -->
+        <main id="exams-tab" class="glass-panel main-content tab-content">
+            <div class="table-header">
+                <h2>Imtihonlar Jadvali</h2>
+                <p>242-Amaliy matematika guruhi nazorat jadvali</p>
+            </div>
+            
+            {% if exams %}
+                <div class="schedule-list fade-in">
+                    {% for exam in exams %}
+                    <div class="schedule-group">
+                        <div class="date-header">{{ exam.date }}</div>
+                        <div class="exam-card">
+                            <div class="exam-info">
+                                <h3>{{ exam.type }} - {{ exam.course }}</h3>
+                                <div class="exam-meta">
+                                    <span><i class="fas fa-user-tie"></i> {{ exam.teacher }}</span>
+                                    <span><i class="fas fa-door-open"></i> {{ exam.room }}</span>
+                                </div>
+                            </div>
+                            <div class="exam-time">{{ exam.time }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state"><i class="fas fa-calendar-xmark"></i><p>Jadval hali yuklanmagan</p></div>
+            {% endif %}
+        </main>
+
+        <!-- 💰 TO'LOVLAR PANELI -->
+        <main id="finance-tab" class="glass-panel main-content tab-content">
+            <div class="table-header">
+                <h2>Talabalar To'lov Holati</h2>
+                <p>Kontrakt va Grant ma'lumotlari boshqaruvi</p>
+            </div>
+
+            <div class="finance-grid">
+                {% if finances %}
+                    {% for item in finances %}
+                    <div class="finance-card fade-in" style="animation-delay: {{ loop.index0 * 0.1 }}s">
+                        <h3>{{ item.full_name }}</h3>
+                        <div class="finance-item">
+                            <span class="label">Turi:</span>
+                            <span class="status-badge {% if item.type == 'Grant' %}status-grant{% else %}status-contract{% endif %}">
+                                {{ item.type }}
+                            </span>
+                        </div>
+                        <div class="finance-item">
+                            <span class="label">Umumiy:</span>
+                            <span class="value">{{ "{:,.0f}".format(item.total) }} so'm</span>
+                        </div>
+                        <div class="finance-item">
+                            <span class="label">To'langan:</span>
+                            <span class="value" style="color: #4ade80;">{{ "{:,.0f}".format(item.paid) }} so'm</span>
+                        </div>
+                        <div class="finance-item" style="border-top: 1px solid var(--glass-border); padding-top: 0.5rem; margin-top: 0.5rem;">
+                            <span class="label">Qarz:</span>
+                            <span class="value" style="color: #ef4444;">{{ "{:,.0f}".format(item.debt) }} so'm</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state" style="grid-column: 1/-1;"><i class="fas fa-wallet"></i><p>Moliya ma'lumotlari yo'q</p></div>
+                {% endif %}
             </div>
         </main>
     </div>
@@ -80,25 +150,38 @@
             <button onclick="document.getElementById('addModal').style.display='none'" style="position: absolute; top: 1rem; right: 1.5rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;">&times;</button>
             <h2 style="margin-bottom: 1.5rem;"><i class="fas fa-user-plus"></i> Yangi Talaba</h2>
             
-            <form action="/add_student" method="post" style="display: flex; flex-direction: column; gap: 1rem;">
+            <form action="/api/add_student" method="post" style="display: flex; flex-direction: column; gap: 1rem;">
                 <div>
                     <label style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.3rem; display: block;">F.I.SH</label>
-                    <input type="text" name="full_name" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; outline: none;">
+                    <input type="text" name="full_name" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white;">
                 </div>
                 <div>
                     <label style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.3rem; display: block;">Yo'nalish (Major)</label>
-                    <input type="text" name="major" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; outline: none;">
+                    <input type="text" name="major" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white;">
                 </div>
                 <div>
                     <label style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.3rem; display: block;">Umumiy Ball (Grade)</label>
-                    <input type="number" name="grade" min="0" max="100" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white; outline: none;">
+                    <input type="number" name="grade" min="0" max="100" required style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: white;">
                 </div>
-                
-                <button type="submit" style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">
-                    Saqlash va Hisoblash
-                </button>
+                <button type="submit" style="margin-top: 1rem; padding: 1rem; background: var(--primary); border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">Saqlash</button>
             </form>
         </div>
     </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
 </body>
 </html>
