@@ -3,3 +3,6 @@ uvicorn
 pandas
 jinja2
 python-multipart
+pyodbc
+python-dotenv
+gunicorn
