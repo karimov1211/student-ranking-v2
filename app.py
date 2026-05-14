@@ -10,10 +10,10 @@ import pandas as pd
 
 app = FastAPI(title="Student Ranking API")
 
-# Fayl yo'llarini sozlash (frontEnd papkasiga yo'naltiramiz)
+# Fayl yo'llarini sozlash
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "..", "frontEnd", "templates"))
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "..", "frontEnd", "static")), name="static")
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "frontEnd", "templates"))
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "frontEnd", "static")), name="static")
 
 # Next.js Front-end bilan ulanish uchun CORS ruxsatnomasi
 app.add_middleware(
